@@ -46,8 +46,19 @@
     <script src="../res/mui/js/mui.min.js"></script>
     <script src="/js/jquery.min.js"></script>
     <script>
-        // 通过ajax提交表单数据，将信息发送给后端
+        // 此页面地址中如果有URL参数，那么登录成功后跳转至该页面，
+        // 如果没有则默认跳转至首页
+        // 1.判断有没有URL并且获得URL参数的值
+        var search = location.search.slice(1);
+        // 使用正则匹配URL参数的值
+        var reg = /url=(.+)/;
+        var match = reg.exec(search);
 
+        var url = match && match[1];
+        url = url || '/index.html';
+
+        // 2.根据URL实现跳转
+        // 通过ajax提交表单数据，将信息发送给后端
         // 监听表单提交
         $('form').on('submit',function () {
             // 1.获取用户填写的表单信息
@@ -69,8 +80,8 @@
 
                     // 4.处理登录后的逻辑
                     if (info.success) {
-                        location.href = '/user/index.html';
-                        return false;
+                        location.href = url;
+                        return;
                     }
                     alert(info.message);
                 }
